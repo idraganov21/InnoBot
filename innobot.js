@@ -1,4 +1,4 @@
-const { Telegraf, Markup } = require('telegraf');
+const { Telegraf, Markup, ReplyKeyboardRemove } = require('telegraf');
 require('dotenv').config();
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
@@ -35,7 +35,7 @@ bot.hears(['За нас', 'Услуги', 'Планове и абонамент'
     ctx.reply('Тук е информация за дигиталния маркетинг.');
   }
 
-  const replyMarkup = Markup.keyboard([['Да'], ['Не']]).oneTime().resize();
+  const replyMarkup = ReplyKeyboardRemove.remove();
 
   ctx.reply('Имате ли други въпроси?', replyMarkup);
 });
