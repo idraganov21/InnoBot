@@ -1,16 +1,17 @@
-const { Telegraf, Markup } = require('telegraf');
+const TelegramBot = require('node-telegram-bot-api');
 require('dotenv').config();
 const express = require('express');
 
-const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
+const botToken = process.env.TELEGRAM_BOT_TOKEN;
 const app = express();
+const bot = new TelegramBot(botToken);
 
 // Set up the webhook URL for your bot
 const webhookUrl = process.env.HEROKU_URL || '/webhook';
-bot.telegram.setWebhook(webhookUrl);
+bot.setWebHook(`${webhookUrl}bot${botToken}`);
 
 // Define a command handler
-bot.command('start', (ctx) => {
+bot.onText(/\/start/, (msg) => {
   const menuOptions = [
     ['За нас'],
     ['Услуги'],
@@ -19,61 +20,79 @@ bot.command('start', (ctx) => {
     ['Дигитален маркетинг']
   ];
 
-  const replyMarkup = Markup.keyboard(menuOptions).oneTime().resize();
+  const replyMarkup = {
+    keyboard: menuOptions,
+    one_time_keyboard: true,
+    resize_keyboard: true
+  };
 
-  ctx.reply('Здравейте, моето име е InnoBot, и съм тук да ви запозная с InnoGrowth. Моля изберете от менюто:', replyMarkup);
+  bot.sendMessage(msg.chat.id, 'Здравейте, моето име е InnoBot, и съм тук да ви запозная с InnoGrowth. Моля изберете от менюто:', { reply_markup: replyMarkup });
 });
 
 // Define a message handler for menu selection
-bot.hears(['За нас', 'Услуги', 'Планове и абонамент', 'Уебсайтове', 'Дигитален маркетинг'], (ctx) => {
-  const selectedOption = ctx.message.text;
+bot.onText(/^(За нас|Услуги|Планове и абонамент|Уебсайтове|Дигитален маркетинг)$/, (msg, match) => {
+  const selectedOption = match[1];
 
   // Perform actions based on the selected option
   if (selectedOption === 'За нас') {
-    ctx.reply('Това не е информация.');
+    bot.sendMessage(msg.chat.id, 'Това не е информация.');
   } else if (selectedOption === 'Услуги') {
-    ctx.reply('Това са нашите услуги.');
+    bot.sendMessage(msg.chat.id, 'Това са нашите услуги.');
   } else if (selectedOption === 'Планове и абонамент') {
-    ctx.reply('Тук са нашите планове и абонаменти.');
+    bot.sendMessage(msg.chat.id, 'Тук са нашите планове и абонаменти.');
   } else if (selectedOption === 'Уебсайтове') {
-    ctx.reply('Тук е информация за нашите уебсайтове.');
+    bot.sendMessage(msg.chat.id, 'Тук е информация за нашите уебсайтове.');
   } else if (selectedOption === 'Дигитален маркетинг') {
-    ctx.reply('Тук е информация за дигиталния маркетинг.');
+    bot.sendMessage(msg.chat.id, 'Тук е информация за дигиталния маркетинг.');
   }
 
-  const replyMarkup = Markup.keyboard([['Да'], ['Не']]).oneTime().resize();
+  const replyMarkup = {
+    keyboard: [['Да'], ['Не']],
+    one_time_keyboard: true,
+    resize_keyboard: true
+  };
 
-  ctx.reply('Имате ли други въпроси?', replyMarkup);
+  bot.sendMessage(msg.chat.id, 'Имате ли други въпроси?', { reply_markup: replyMarkup });
 });
 
 // Define a message handler for handling other questions
-bot.hears(['Да'], (ctx) => {
-  const menuOptions = [
-    ['За нас'],
-    ['Услуги'],
-    ['Планове и абонамент'],
-    ['Уебсайтове'],
-    ['Дигитален маркетинг']
-  ];
+bot.onText(/^(Да|Не)$/, (msg, match) => {
+  const selectedOption = match[1];
 
-  const replyMarkup = Markup.keyboard(menuOptions).oneTime().resize();
+  if (selectedOption === 'Да') {
+    const menuOptions = [
+      ['За нас'],
+      ['Услуги'],
+      ['Планове и абонамент'],
+      ['Уебсайтове'],
+      ['Дигитален маркетинг']
+    ];
 
-  ctx.reply('С какво е свързан въпросът Ви?', replyMarkup);
+    const replyMarkup = {
+      keyboard: menuOptions,
+      one_time_keyboard: true,
+      resize_keyboard: true
+    };
+
+    bot.sendMessage(msg.chat.id, 'С какво е свързан въпросът Ви?', { reply_markup: replyMarkup });
+  } else {
+    bot.sendMessage(msg.chat.id, 'Благодаря Ви! Желая Ви приятен ден!');
+  }
 });
 
-bot.hears(['Не'], (ctx) => {
-  ctx.reply('Благодаря Ви! Желая Ви приятен ден!');
+bot.onText(/.*/, (msg) => {
+  bot.sendMessage(msg.chat.id, 'Моля отговорете с "Да" или "Не".');
 });
 
-bot.on('text', (ctx) => {
-  ctx.reply('Моля отговорете с "Да" или "Не".');
-});
+app.use(express.json());
 
-app.use(bot.webhookCallback('/webhook'));
+app.post(`/webhook/bot${botToken}`, (req, res) => {
+  bot.processUpdate(req.body);
+  res.sendStatus(200);
+});
 
 // Start the Express.js server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  bot.telegram.setWebhook(`${webhookUrl}bot${bot}`);
   console.log(`Telegram bot is running on port ${port}`);
 });
