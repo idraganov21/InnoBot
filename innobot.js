@@ -69,12 +69,11 @@ bot.on('text', (ctx) => {
   ctx.reply('Моля отговорете с "Да" или "Не".');
 });
 
-// Set up the webhook route
-app.use(bot.webhookCallback(webhookUrl));
+app.use(bot.webhookCallback('/webhook'));
 
 // Start the Express.js server
 const port = process.env.PORT || 3000;
-bot.setWebHook(`${webhookUrl}bot${process.env.TELEGRAM_BOT_TOKEN}`);
 app.listen(port, () => {
+  bot.telegram.setWebhook(`${webhookUrl}bot${bot}`);
   console.log(`Telegram bot is running on port ${port}`);
 });
