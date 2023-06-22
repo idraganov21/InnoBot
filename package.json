@@ -1,0 +1,24 @@
+{
+  "name": "innobot",
+  "version": "1.0.0",
+  "description": "telegram bot for innogrowth",
+  "main": "innobot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/idraganov21/InnoBot.git"
+  },
+  "keywords": [
+    "inno",
+    "innogrowth",
+    "telegram"
+  ],
+  "author": "Ivan Draganov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/idraganov21/InnoBot/issues"
+  },
+  "homepage": "https://github.com/idraganov21/InnoBot#readme"
+}
