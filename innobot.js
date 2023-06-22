@@ -1,7 +1,9 @@
 const { Telegraf, Markup } = require('telegraf');
 require('dotenv').config();
+const express = require('express');
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
+const app = express();
 
 // Define a command handler
 bot.command('start', (ctx) => {
@@ -63,5 +65,9 @@ bot.on('text', (ctx) => {
   ctx.reply('Моля отговорете с "Да" или "Не".');
 });
 
-// Start the bot
-bot.launch();
+// Start the Express.js server
+const port = process.env.PORT || 3000;
+app.use(bot.webhookCallback('/webhook'));
+app.listen(port, () => {
+  console.log(`Server is listening on port ${port}`);
+});
