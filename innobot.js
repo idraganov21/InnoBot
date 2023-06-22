@@ -9,6 +9,21 @@ const HEROKU_URL = "https://innobot-117f0c66733c.herokuapp.com/";
 
 // Define a command handler
 bot.onText(/^\/start($|\s)/, (msg) => {
+  showMenu(msg.chat.id);
+});
+
+// Define a message handler for menu selection
+bot.onText(/^(За нас|Услуги|Планове и абонамент|Уебсайтове|Дигитален маркетинг)$/, (msg, match) => {
+  const selectedOption = match[1];
+  processMenuSelection(msg.chat.id, selectedOption);
+});
+
+// Define a message handler for other commands
+bot.onText(/^\/menu($|\s)/, (msg) => {
+  showMenu(msg.chat.id);
+});
+
+function showMenu(chatId) {
   const menuOptions = [
     ['За нас'],
     ['Услуги'],
@@ -23,24 +38,21 @@ bot.onText(/^\/start($|\s)/, (msg) => {
     resize_keyboard: true
   };
 
-  bot.sendMessage(msg.chat.id, 'Здравейте, моето име е InnoBot, и съм тук да ви запозная с InnoGrowth. Моля изберете от менюто:', { reply_markup: replyMarkup });
-});
+  bot.sendMessage(chatId, 'Здравейте, моето име е InnoBot, и съм тук да ви запозная с InnoGrowth. Моля изберете от менюто:', { reply_markup: replyMarkup });
+}
 
-// Define a message handler for menu selection
-bot.onText(/^(За нас|Услуги|Планове и абонамент|Уебсайтове|Дигитален маркетинг)$/, (msg, match) => {
-  const selectedOption = match[1];
-
+function processMenuSelection(chatId, selectedOption) {
   // Perform actions based on the selected option
   if (selectedOption === 'За нас') {
-    bot.sendMessage(msg.chat.id, 'Това не е информация.');
+    bot.sendMessage(chatId, 'Това не е информация.');
   } else if (selectedOption === 'Услуги') {
-    bot.sendMessage(msg.chat.id, 'Това са нашите услуги.');
+    bot.sendMessage(chatId, 'Това са нашите услуги.');
   } else if (selectedOption === 'Планове и абонамент') {
-    bot.sendMessage(msg.chat.id, 'Тук са нашите планове и абонаменти.');
+    bot.sendMessage(chatId, 'Тук са нашите планове и абонаменти.');
   } else if (selectedOption === 'Уебсайтове') {
-    bot.sendMessage(msg.chat.id, 'Тук е информация за нашите уебсайтове.');
+    bot.sendMessage(chatId, 'Тук е информация за нашите уебсайтове.');
   } else if (selectedOption === 'Дигитален маркетинг') {
-    bot.sendMessage(msg.chat.id, 'Тук е информация за дигиталния маркетинг.');
+    bot.sendMessage(chatId, 'Тук е информация за дигиталния маркетинг.');
   }
 
   const replyMarkup = {
@@ -49,34 +61,8 @@ bot.onText(/^(За нас|Услуги|Планове и абонамент|Уе
     resize_keyboard: true
   };
 
-  bot.sendMessage(msg.chat.id, 'Имате ли други въпроси?', { reply_markup: replyMarkup });
-});
-
-// Define a message handler for handling other questions
-bot.onText(/^(Да|Не)$/, (msg, match) => {
-  const selectedOption = match[1];
-
-  if (selectedOption === 'Да') {
-    const menuOptions = [
-      ['За нас'],
-      ['Услуги'],
-      ['Планове и абонамент'],
-      ['Уебсайтове'],
-      ['Дигитален маркетинг']
-    ];
-
-    const replyMarkup = {
-      keyboard: menuOptions,
-      one_time_keyboard: true,
-      resize_keyboard: true
-    };
-
-    bot.sendMessage(msg.chat.id, 'С какво е свързан въпросът Ви?', { reply_markup: replyMarkup });
-  } else {
-    bot.sendMessage(msg.chat.id, 'Благодаря Ви! Желая Ви приятен ден!');
-  }
-});
-
+  bot.sendMessage(chatId, 'Имате ли други въпроси?', { reply_markup: replyMarkup });
+}
 
 app.use(express.json());
 
