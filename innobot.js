@@ -52,6 +52,32 @@ bot.onText(/^(За нас|Услуги|Планове и абонамент|Уе
   bot.sendMessage(msg.chat.id, 'Имате ли други въпроси?', { reply_markup: replyMarkup });
 });
 
+// Define a message handler for handling other questions
+bot.onText(/^(Да|Не)$/, (msg, match) => {
+  const selectedOption = match[1];
+
+  if (selectedOption === 'Да') {
+    const menuOptions = [
+      ['За нас'],
+      ['Услуги'],
+      ['Планове и абонамент'],
+      ['Уебсайтове'],
+      ['Дигитален маркетинг']
+    ];
+
+    const replyMarkup = {
+      keyboard: menuOptions,
+      one_time_keyboard: true,
+      resize_keyboard: true
+    };
+
+    bot.sendMessage(msg.chat.id, 'С какво е свързан въпросът Ви?', { reply_markup: replyMarkup });
+  } else {
+    bot.sendMessage(msg.chat.id, 'Благодаря Ви! Желая Ви приятен ден!');
+  }
+});
+
+
 app.use(express.json());
 
 app.post(`/bot${botToken}`, (req, res) => {
