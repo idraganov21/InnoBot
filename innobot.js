@@ -4,6 +4,7 @@ const express = require('express');
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 const app = express();
+const HEROKU_URL = process.env.HEROKU_URL
 
 // Define a command handler
 bot.command('start', (ctx) => {
@@ -67,7 +68,7 @@ bot.on('text', (ctx) => {
 
 // Start the Express.js server
 const port = process.env.PORT || 3000;
-app.use(bot.webhookCallback('/webhook'));
+app.use(bot.webhookCallback(HEROKU_URL));
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
