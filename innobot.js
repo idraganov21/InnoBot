@@ -84,7 +84,7 @@ bot.onText(/.*/, (msg) => {
 
 app.use(express.json());
 
-app.post(`/webhook/bot${bot}`, (req, res) => {
+app.post(`/bot${bot}`, (req, res) => {
   bot.processUpdate(req.body);
   res.sendStatus(200);
 });
