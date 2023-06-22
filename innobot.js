@@ -7,7 +7,8 @@ const app = express();
 const bot = new TelegramBot(botToken);
 
 // Set up the webhook URL for your bot
-const webhookUrl = process.env.HEROKU_URL || '/webhook';
+const webhookUrl = process.env.HEROKU_URL ? `${process.env.HEROKU_URL}/webhook` : '/webhook';
+
 bot.setWebHook(`${webhookUrl}/bot${botToken}`);
 
 // Define a command handler
