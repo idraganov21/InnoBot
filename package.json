@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/idraganov21/InnoBot/issues"
   },
-  "homepage": "https://github.com/idraganov21/InnoBot#readme"
+  "homepage": "https://github.com/idraganov21/InnoBot#readme",
+  "dependencies": {
+    "telegraf": "^4.12.2"
+  }
 }
