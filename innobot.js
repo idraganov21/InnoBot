@@ -5,7 +5,7 @@ const express = require('express');
 const botToken = process.env.TELEGRAM_BOT_TOKEN;
 const app = express();
 const bot = new TelegramBot(botToken);
-const HEROKU_URL = procces.env.HEROKU_URL;
+const HEROKU_URL = process.env.HEROKU_URL;
 
 
 // Define a command handler
