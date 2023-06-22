@@ -4,7 +4,10 @@ const express = require('express');
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 const app = express();
-const HEROKU_URL = process.env.HEROKU_URL
+
+// Set up the webhook URL for your bot
+const webhookUrl = process.env.HEROKU_URL || '/webhook';
+bot.telegram.setWebhook(webhookUrl);
 
 // Define a command handler
 bot.command('start', (ctx) => {
@@ -27,7 +30,7 @@ bot.hears(['За нас', 'Услуги', 'Планове и абонамент'
 
   // Perform actions based on the selected option
   if (selectedOption === 'За нас') {
-    ctx.reply('Това е информация за нас.');
+    ctx.reply('Това не е информация.');
   } else if (selectedOption === 'Услуги') {
     ctx.reply('Това са нашите услуги.');
   } else if (selectedOption === 'Планове и абонамент') {
@@ -66,9 +69,11 @@ bot.on('text', (ctx) => {
   ctx.reply('Моля отговорете с "Да" или "Не".');
 });
 
+// Set up the webhook route
+app.use(bot.webhookCallback(webhookUrl));
+
 // Start the Express.js server
 const port = process.env.PORT || 3000;
-app.use(bot.webhookCallback(HEROKU_URL));
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
