@@ -8,7 +8,7 @@ const bot = new TelegramBot(botToken);
 
 // Set up the webhook URL for your bot
 const webhookUrl = process.env.HEROKU_URL || '/webhook';
-bot.setWebHook(`${webhookUrl}bot${botToken}`);
+bot.setWebHook(`${webhookUrl}/bot${botToken}`);
 
 // Define a command handler
 bot.onText(/\/start/, (msg) => {
