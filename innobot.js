@@ -5,11 +5,8 @@ const express = require('express');
 const botToken = process.env.TELEGRAM_BOT_TOKEN;
 const app = express();
 const bot = new TelegramBot(botToken);
+const HEROKU_URL = procces.env.HEROKU_URL;
 
-// Set up the webhook URL for your bot
-const webhookUrl = process.env.HEROKU_URL ? `${process.env.HEROKU_URL}/webhook` : '/webhook';
-
-bot.setWebHook(`${webhookUrl}/bot${botToken}`);
 
 // Define a command handler
 bot.onText(/\/start/, (msg) => {
@@ -94,6 +91,8 @@ app.post(`/webhook/bot${botToken}`, (req, res) => {
 
 // Start the Express.js server
 const port = process.env.PORT || 3000;
+
 app.listen(port, () => {
+  bot.setWebHook(`${HEROKU_URL}bot${botToken}`);
   console.log(`Telegram bot is running on port ${port}`);
 });
