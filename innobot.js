@@ -7,9 +7,8 @@ const app = express();
 const bot = new TelegramBot(botToken);
 const HEROKU_URL = "https://innobot-117f0c66733c.herokuapp.com/";
 
-
 // Define a command handler
-bot.onText(/\/start/, (msg) => {
+bot.onText(/^\/start($|\s)/, (msg) => {
   const menuOptions = [
     ['За нас'],
     ['Услуги'],
@@ -79,7 +78,10 @@ bot.onText(/^(Да|Не)$/, (msg, match) => {
 });
 
 bot.onText(/.*/, (msg) => {
-  bot.sendMessage(msg.chat.id, 'Моля отговорете с "Да" или "Не".');
+  const message = msg.text.trim();
+  if (message !== '/start') {
+    bot.sendMessage(msg.chat.id, 'Моля отговорете с "Да" или "Не".');
+  }
 });
 
 app.use(express.json());
