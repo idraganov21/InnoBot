@@ -7,10 +7,6 @@ const app = express();
 const bot = new TelegramBot(botToken);
 const HEROKU_URL = "https://innobot-117f0c66733c.herokuapp.com/";
 
-bot.onText(/^(?!\/start\b)/, (msg) => {
-  const chatId = msg.chat.id;
-  bot.sendMessage(chatId, 'Hello! I am InnoBot. I am powered by InnoGrowth');
-});
 
 // Define a command handler
 bot.onText(/^\/start($|\s)/, (msg) => {
