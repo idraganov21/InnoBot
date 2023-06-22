@@ -1,1 +1,1 @@
-web: node telegramBot.js
+web: node innobot.js
