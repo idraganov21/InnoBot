@@ -74,6 +74,7 @@ app.use(bot.webhookCallback(webhookUrl));
 
 // Start the Express.js server
 const port = process.env.PORT || 3000;
+bot.setWebHook(`${webhookUrl}bot${process.env.TELEGRAM_BOT_TOKEN}`);
 app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
+  console.log(`Telegram bot is running on port ${port}`);
 });
